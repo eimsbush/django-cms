@@ -304,7 +304,10 @@ class CMSPlugin(six.with_metaclass(PluginModelBase, MP_Node)):
         # we assign a parent to our new plugin
         parent_cache[self.pk] = new_plugin
         if self.parent:
-            parent = parent_cache[self.parent_id]
+            try:
+                parent = parent_cache[self.parent_id]
+            except KeyError:
+                parent = self.parent
             parent = CMSPlugin.objects.get(pk=parent.pk)
             new_plugin.parent_id = parent.pk
             new_plugin.parent = parent
